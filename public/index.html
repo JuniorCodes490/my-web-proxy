@@ -61,7 +61,7 @@
         }
 
         logStatus('1/3 Registering Service Worker...');
-        await navigator.serviceWorker.register('/uv/sw.js', { scope: __uv$config.prefix });
+        await navigator.serviceWorker.register('/sw.js', { scope: __uv$config.prefix });
         await navigator.serviceWorker.ready;
 
         logStatus('2/3 Connecting Wisp transport...');
