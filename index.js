@@ -1,8 +1,10 @@
 const express = require('express');
 const { createServer } = require('node:http');
 const { uvPath } = require('@titaniumnetwork-dev/ultraviolet');
-const wisp = require('@mercuryworkshop/wisp-js/server');
+const wispModule = require('@mercuryworkshop/wisp-js/server');
 const path = require('node:path');
+
+const wisp = wispModule.wisp || wispModule.default || wispModule;
 
 const epoxyPath = path.join(__dirname, 'node_modules', '@mercuryworkshop', 'epoxy-transport', 'dist');
 const baremuxPath = path.join(__dirname, 'node_modules', '@mercuryworkshop', 'bare-mux', 'dist');
@@ -27,7 +29,7 @@ app.use((req, res) => {
 const server = createServer(app);
 
 server.on('upgrade', (req, socket, head) => {
-  if (req.url.endsWith('/wisp/')) {
+  if (req.url.startsWith('/wisp')) {
     wisp.routeRequest(req, socket, head);
   } else {
     socket.end();
