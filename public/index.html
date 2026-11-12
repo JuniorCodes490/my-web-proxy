@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Proxy Window</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+    body { display: flex; flex-direction: column; height: 100vh; background: #131d21; color: #fff; }
+    .toolbar {
+      display: flex; gap: 8px; padding: 10px 14px;
+      background: #1a272c; border-bottom: 1px solid #2b3d44;
+    }
+    input {
+      flex: 1; padding: 8px 12px; border-radius: 6px;
+      border: 1px solid #2b3d44; background: #0f171a; color: #fff; font-size: 14px;
+    }
+    button {
+      padding: 8px 16px; border: none; border-radius: 6px;
+      background: #2ecc71; color: #0f171a; font-weight: 600; cursor: pointer;
+    }
+    button:hover { background: #27ae60; }
+    iframe { flex: 1; width: 100%; border: none; background: #fff; }
+  </style>
+</head>
+<body>
+  <form class="toolbar" id="proxyForm">
+    <button type="button" onclick="document.getElementById('viewport').contentWindow.history.back()">←</button>
+    <button type="button" onclick="document.getElementById('viewport').contentWindow.history.forward()">→</button>
+    <input type="text" id="urlInput" placeholder="Enter URL (e.g., https://example.com)" required />
+    <button type="submit">Go</button>
+  </form>
+
+  <iframe id="viewport" src="/proxy?url=https%3A%2F%2Fexample.com"></iframe>
+
+  <script>
+    const form = document.getElementById('proxyForm');
+    const input = document.getElementById('urlInput');
+    const viewport = document.getElementById('viewport');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rawUrl = input.value.trim();
+      if (!rawUrl) return;
+      viewport.src = `/proxy?url=${encodeURIComponent(rawUrl)}`;
+    });
+  </script>
+</body>
+</html>
