@@ -1,10 +1,11 @@
 const express = require('express');
 const { createServer } = require('node:http');
 const { uvPath } = require('@titaniumnetwork-dev/ultraviolet');
-const { epoxyPath } = require('@mercuryworkshop/epoxy-transport');
-const { baremuxPath } = require('@mercuryworkshop/bare-mux/node');
 const wisp = require('@mercuryworkshop/wisp-js/server');
 const path = require('node:path');
+
+const epoxyPath = path.dirname(require.resolve('@mercuryworkshop/epoxy-transport'));
+const baremuxPath = path.dirname(require.resolve('@mercuryworkshop/bare-mux'));
 
 const app = express();
 const PORT = process.env.PORT || 3000;
