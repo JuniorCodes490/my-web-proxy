@@ -4,14 +4,19 @@ const { uvPath } = require('@titaniumnetwork-dev/ultraviolet');
 const wisp = require('@mercuryworkshop/wisp-js/server');
 const path = require('node:path');
 
-const epoxyPath = path.dirname(require.resolve('@mercuryworkshop/epoxy-transport'));
-const baremuxPath = path.dirname(require.resolve('@mercuryworkshop/bare-mux'));
+const epoxyPath = path.join(__dirname, 'node_modules', '@mercuryworkshop', 'epoxy-transport', 'dist');
+const baremuxPath = path.join(__dirname, 'node_modules', '@mercuryworkshop', 'bare-mux', 'dist');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uv/', express.static(uvPath));
+
+app.use('/uv/', (req, res, next) => {
+  res.setHeader('Service-Worker-Allowed', '/');
+  next();
+}, express.static(uvPath));
+
 app.use('/epoxy/', express.static(epoxyPath));
 app.use('/baremux/', express.static(baremuxPath));
 
