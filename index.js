@@ -29,9 +29,15 @@ app.use((req, res) => {
 const server = createServer(app);
 
 server.on('upgrade', (req, socket, head) => {
-  if (req.url.startsWith('/wisp')) {
-    wisp.routeRequest(req, socket, head);
-  } else {
+  console.log('WS Upgrade:', req.url, 'keys:', Object.keys(wisp));
+  try {
+    if (req.url.startsWith('/wisp')) {
+      wisp.routeRequest(req, socket, head);
+    } else {
+      socket.end();
+    }
+  } catch (err) {
+    console.error('Wisp upgrade error:', err);
     socket.end();
   }
 });
