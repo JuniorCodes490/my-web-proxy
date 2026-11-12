@@ -3,6 +3,7 @@ const { createServer } = require('node:http');
 const { uvPath } = require('@titaniumnetwork-dev/ultraviolet');
 const { epoxyPath } = require('@mercuryworkshop/epoxy-transport');
 const { baremuxPath } = require('@mercuryworkshop/bare-mux/node');
+const wisp = require('@mercuryworkshop/wisp-js/server');
 const path = require('node:path');
 
 const app = express();
@@ -18,6 +19,14 @@ app.use((req, res) => {
 });
 
 const server = createServer(app);
+
+server.on('upgrade', (req, socket, head) => {
+  if (req.url.endsWith('/wisp/')) {
+    wisp.routeRequest(req, socket, head);
+  } else {
+    socket.end();
+  }
+});
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
